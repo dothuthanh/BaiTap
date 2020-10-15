@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit customer</title>
+</head>
+<body>
+<h1>Edit customer</h1>
+<p>
+    <a href="/customers">Customer list</a>
+</p>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<form th:action="@{/edit-customer}" th:object="${customer}" method="post" enctype="multipart/form-data">
+    <input th:type="hidden" name="id" th:field="*{id}">
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" th:field="*{name}"/></td>
+        </tr>
+        <tr>
+            <td>Old</td>
+            <td><input type="text" th:field="*{old}"/></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><input type="text" th:field="*{address}"/></td>
+        </tr>
+        <tr>
+            <td>Detail</td>
+            <td><input type="text" th:field="*{detail}"/></td>
+        </tr>
+        <tr>
+            <td>Img</td>
+            <td><input type="file" th:field="*{img}"/></td>
+        </tr>
+        <tr>
+            <td>Phone Number</td>
+            <td><input type="text" th:field="*{phoneNumber}"/></td>
+        </tr>
+<!--        <tr>-->
+<!--            <td>Province</td>-->
+<!--            <td>-->
+<!--                <select name="province">-->
+<!--                    <option th:each="p : ${provinces}"-->
+<!--                            th:value="${p.id}"-->
+<!--                            th:text="${p.name}"-->
+<!--                            th:selected="(${p.id} == *{province.id})"></option>-->
+<!--                </select>-->
+<!--            </td>        </tr>-->
+        <tr>
+            <td>Province:</td>
+            <td>
+                <select th:field="*{province}">
+                    <option th:each="p : ${provinces}" th:value="${p.id}" th:text="${p.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Update customer"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
