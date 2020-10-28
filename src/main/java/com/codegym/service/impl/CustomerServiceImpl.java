@@ -4,6 +4,7 @@ import com.codegym.model.Customer;
 import com.codegym.repository.CustomerRepository;
 import com.codegym.service.CustomerService;
 import com.codegym.service.exption.DuplicationExption;
+import com.codegym.service.exption.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -17,8 +18,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer findById(Long id) {
-        return customerRepository.findOne(id);
+    public Customer findById(Long id) throws NotFoundException {
+//        return customerRepository.findOne(id);
+        Customer target = customerRepository.findOne(id);
+        if(target == null) {
+            throw new NotFoundException();
+        }
+        return target;
     }
 
 //    @Override

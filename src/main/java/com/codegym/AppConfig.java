@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -53,6 +50,7 @@ import java.util.Properties;
 @ComponentScan("com.codegym")
 @EnableSpringDataWebSupport
 @PropertySource("classpath:uploadfile.properties")
+@EnableAspectJAutoProxy
 public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
     private ApplicationContext aplicationContext;
 
@@ -102,7 +100,7 @@ public class AppConfig extends WebMvcConfigurerAdapter implements ApplicationCon
     public DataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/cms");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/cms?useSSL=false");
         dataSource.setUsername( "root" );
         dataSource.setPassword( "123123" );
         return dataSource;

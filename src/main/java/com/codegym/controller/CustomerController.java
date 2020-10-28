@@ -6,21 +6,21 @@ import com.codegym.model.Province;
 import com.codegym.service.CustomerService;
 import com.codegym.service.ProvinceService;
 import com.codegym.service.exption.DuplicationExption;
+import com.codegym.service.exption.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 
 @Controller
+//@SessionAttributes("customer")
 public class CustomerController {
     @Autowired
     private Environment environment;
@@ -28,24 +28,32 @@ public class CustomerController {
     private CustomerService customerService;
     @Autowired
     private ProvinceService provinceService;
+
     @ModelAttribute("provinces")
-    public Iterable<Province> provinces(){
+    public Iterable<Province> provinces() {
         return provinceService.finAll();
     }
+
+    //    @ModelAttribute("customer")
+//    public Customer setUpcounter(){
+//        return new Customer();
+//    }
     @GetMapping("/customers")
-    public ModelAndView listCustomers(){
+    public ModelAndView listCustomers() {
         Iterable<Customer> customers = customerService.findAll();
         ModelAndView modelAndView = new ModelAndView("/customer/list");
         modelAndView.addObject("customers", customers);
         return modelAndView;
     }
-    @GetMapping("/create-customer")
+
+        @GetMapping("/create-customer")
     public ModelAndView showCreateForm() {
         ModelAndView modelAndView = new ModelAndView("/customer/create");
         modelAndView.addObject("customer", new CustomerForm());
         return modelAndView;
     }
-    @PostMapping("/create-customer")
+
+        @PostMapping("/create-customer")
     public ModelAndView saveCustomer(@ModelAttribute("customer") CustomerForm customerForm) throws DuplicationExption {
         Customer customer = new Customer(customerForm.getName(),customerForm.getOld(), customerForm.getAddress(), customerForm.getDetail(),customerForm.getPhoneNumber(),customerForm.getProvince());
         MultipartFile file = customerForm.getImg();
@@ -63,7 +71,7 @@ public class CustomerController {
 
     }
     @GetMapping("/edit-customer/{id}")
-    public ModelAndView showEditForm(@PathVariable Long id) throws DuplicationExption{
+    public ModelAndView showEditForm(@PathVariable Long id) throws NotFoundException {
         Customer customer = customerService.findById(id);
         if(customer != null) {
             ModelAndView modelAndView = new ModelAndView("/customer/edit");
@@ -97,7 +105,7 @@ public class CustomerController {
 
     }
     @GetMapping("/delete-customer/{id}")
-    public ModelAndView showDeleteForm(@PathVariable Long id) throws DuplicationExption{
+    public ModelAndView showDeleteForm(@PathVariable Long id) throws Exception {
         Customer customer = customerService.findById(id);
         if(customer != null) {
             ModelAndView modelAndView = new ModelAndView("/customer/delete");
@@ -112,11 +120,11 @@ public class CustomerController {
     }
 
     @PostMapping("/delete-customer")
-    public String deleteCustomer(@ModelAttribute("customer") Customer customer) throws DuplicationExption{
+    public String deleteCustomer(@ModelAttribute("customer") Customer customer) {
         customerService.remove(customer.getId());
         return "redirect:customers";
     }
-    @ExceptionHandler(DuplicationExption.class)
+    @ExceptionHandler(NotFoundException.class)
     public ModelAndView showInputNotAcceptable() {
         return new ModelAndView("/customer/exption");
     }
