@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 
 @Entity
-public class Customer implements Validator {
+public class Customer  {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -139,26 +139,26 @@ public class Customer implements Validator {
                 '}';
     }
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Customer.class.isAssignableFrom(clazz);
-    }
+//    @Override
+//    public boolean supports(Class<?> clazz) {
+//        return Customer.class.isAssignableFrom(clazz);
+//    }
 //chua hoan thanh
-    @Override
-    public void validate(Object target, Errors errors) {
-        Customer customer = (Customer) target;
-        String phoneNumber = customer.getPhoneNumber();
-        ValidationUtils.rejectIfEmpty(errors,"phoneNumber","phoneNumber.empty");
-        if(phoneNumber.length() >11 || phoneNumber.length() <10) {
-            errors.rejectValue("phoneNumber","phoneNumber.length");
-        }
-        if(!phoneNumber.startsWith("0")){
-            errors.rejectValue("phoneNumber","phoneNumber.startsWith");
-
-        }
-        if(!phoneNumber.matches("(^$|[0-9]*$)")){
-            errors.rejectValue("phoneNumber","phoneNumber.matches");
-        }
-
-    }
+//    @Override
+//    public void validate(Object target, Errors errors) {
+//        Customer customer = (Customer) target;
+//        String phoneNumber = customer.getPhoneNumber();
+//        ValidationUtils.rejectIfEmpty(errors,"phoneNumber","phoneNumber.empty");
+//        if(phoneNumber.length() >11 || phoneNumber.length() <10) {
+//            errors.rejectValue("phoneNumber","phoneNumber.length");
+//        }
+//        if(!phoneNumber.startsWith("0")){
+//            errors.rejectValue("phoneNumber","phoneNumber.startsWith");
+//
+//        }
+//        if(!phoneNumber.matches("(^$|[0-9]*$)")){
+//            errors.rejectValue("phoneNumber","phoneNumber.matches");
+//        }
+//
+//    }
 }
